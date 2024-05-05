@@ -155,3 +155,22 @@ export const create = async (req: Request, res: Response) => {
         })
     }
 };
+
+// [PATCH] /api/v1/tasks/edit/:id
+export const edit = async (req: Request, res: Response) => {
+    try {
+        const id: string = req.params.id;
+
+        await Task.updateOne({ _id: id }, req.body);
+
+        res.json({
+            code: 200,
+            message: "Cap nhat thanh cong."
+        });
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Error"
+        });
+    }
+};
