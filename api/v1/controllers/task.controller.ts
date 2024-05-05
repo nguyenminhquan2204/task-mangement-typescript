@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import Task from "../models/task.model";
 import paginationHelper from "../../../helpers/pagination";
 import searchHelper from "../../../helpers/search";
-import { ResourceLimits } from "worker_threads";
 
 // [GET] /api/v1/tasks
 export const index = async (req: Request, res: Response) => {
@@ -120,7 +119,24 @@ export const changeMulti = async (req, res) => {
                     message: "Cập nhập trạng thái thành công!"
                 });
                 break;
-        
+            
+            case "delete":
+                await Task.updateMany(
+                    {
+                        _id: { $in: ids }
+                    },
+                    {
+                        deleted: true,
+                        deletedAt: new Date()
+                    }
+                );
+
+                res.json({
+                    code: 200,
+                    message: "Xóa thành công!"
+                });
+                break;
+
             default:
                 res.json({
                     code: 400,
