@@ -64,6 +64,22 @@ export const login = async (req: Request, res: Response) => {
     res.json({
         code: 200,
         message: "Đăng nhập thành công.",
-        token: token
+        token: token,
+    });
+};
+
+// [GET] /api/v1/users/detail/:id
+export const detail = async (req: Request, res: Response) => {
+    const id: string = req.params.id;
+
+    const user = await User.findOne({
+        _id: id,
+        deleted: false
+    }).select("-password -token");
+
+    res.json({
+        code: 200,
+        message: "Thành công!",
+        info: user
     });
 };
