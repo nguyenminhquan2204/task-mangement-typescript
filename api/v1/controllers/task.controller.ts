@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import Task from "../models/task.model";
 import paginationHelper from "../../../helpers/pagination";
 import searchHelper from "../../../helpers/search";
+import { ResourceLimits } from "worker_threads";
 
 // [GET] /api/v1/tasks
 export const index = async (req: Request, res: Response) => {
@@ -133,5 +134,24 @@ export const changeMulti = async (req, res) => {
             code: 400,
             message: "Không tồn tại!"
         });
+    }
+};
+
+// [POST] /api/v1/tasks/create
+export const create = async (req: Request, res: Response) => {
+    try {
+        const task = new Task(req.body);
+        const data = await task.save();
+
+        res.json({
+            code: 200,
+            message: "Tạo thành công!",
+            data: data
+        });
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Lỗi!"
+        })
     }
 };
